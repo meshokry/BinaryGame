@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1651595117 source:g:\c\magic\main.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+
+1651599493 source:g:\c\magic\resources.rc
+

@@ -1,0 +1,5 @@
+#ifndef _resource_
+#define _resource_
+MAINICON ICON "favicon.ico"
+
+#endif // _resource_
