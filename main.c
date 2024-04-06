@@ -1,30 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
-void MaximizeOutputWindow(void)
-{
-    HWND consoleWindow = GetConsoleWindow(); // This gets the value Windows uses to identify your output window
-    ShowWindow(consoleWindow, SW_MAXIMIZE); // this mimics clicking on its' maximize button
-}
-void start()
-{
-HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-COORD NewSBSize = GetLargestConsoleWindowSize(hOut);
-SetConsoleScreenBufferSize(hOut, NewSBSize);
-//HWND hwnd = GetConsoleWindow();
-MaximizeOutputWindow();
 
-}
-void gotoxy(int x, int y)
-{
-  COORD coord;
-  coord.X = x;
-  coord.Y = y;
-  SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-}
+#define MAX_INPUT_NUMBER 5
+
+
+//This Function to get the power
 int Pow(int base,int pow)
 {
-    int i,number=1;
+    int number=1;
     while(pow>0)
     {
      number=number*base;
@@ -32,76 +16,95 @@ int Pow(int base,int pow)
     }
 return number;
 }
+
+//This function to Draw the table
+void Draw_table(int number_of_inputs)
+{
+    int counter=0,column=0;
+    int table_number=Pow(2,number_of_inputs);
+    int max_number=Pow(2,MAX_INPUT_NUMBER);
+    int Digit=0;
+    while(counter<max_number)
+     {
+         Digit|=(table_number&counter);
+         if(Digit!=0)
+         {
+             printf("%3d  |",counter);
+             column++;
+
+             if(column%4==0)
+             printf("\n");
+         }
+         Digit=0;
+
+       counter++;
+     }
+}
 int main()
 {
-int table0[4][4] ={{1, 3, 5, 7},{9, 11, 13,15},{17, 19,21, 23},{25,27,29,31}};
-int table1[4][4]={{2, 3, 6, 7},{10, 11, 14,15},{18, 19,22, 23},{26,27,30,31}};
-int table2[4][4]={{4, 5, 6, 7},{12, 13, 14,15},{20, 21,22, 23},{28,29,30,31}};
-int table3[4][4]={{8, 9, 10, 11},{12, 13, 14,15},{24, 25,26, 27},{28,29,30,31}};
-int table4[4][4]={{16, 17, 18, 19},{20, 21, 22,23},{24, 25,26, 27},{28,29,30,31}};
 
-int i,j,k=0,counter=0;
-int number=0;
-char approval;
-start();
-gotoxy(60,18);
-printf("Choose any integer number from 0 to 31 in your brain");
-gotoxy(70,26);
-system("pause");
-up1:
-system("cls");
-    k=0;
-    approval='/';
-    for(int i = 0; i<4; i++)
-    {
-        gotoxy(65,i+18);
-         printf("%c",186);
-         for(int j = 0; j < 4; j++)
-         {
-              //gotoxy(65,k+18);
-              if(counter==0)
-              printf("%5d", table0[i][j]);
-              else if(counter==1)
-              printf("%5d", table1[i][j]);
-              else if(counter==2)
-              printf("%5d", table2[i][j]);
-              else if(counter==3)
-              printf("%5d", table3[i][j]);
-              else if(counter==4)
-                printf("%5d", table4[i][j]);
-              printf("   |");
-         }
+//Number variable to count the number of the user in it
+//Number of inputs to loop on the 5 tables
+//Play to replay after finishing the game
+//approval character to get the input character from the user
+int Number,Number_Of_Inputs,Play=1;
+char approval='/';
 
-k+=4;
+      while(Play==1)
+      {
+
+                  Number_Of_Inputs=0;
+                  Number=0;
+                  system("cls");
+                  printf("Choose any integer number from 0 to 31 in your brain\n\n\n");
+                  system("pause");
+
+                  while(Number_Of_Inputs<MAX_INPUT_NUMBER)
+                  {
+                           system("cls");
+
+                           Draw_table(Number_Of_Inputs);
+
+                           printf("\n\nIs your number here?{y/n}\n\n");
+
+                           do
+                           {
+                                 approval=getch();
+                                 if((approval=='Y'||approval=='y'))
+                                 {
+                                          Number=Number+Pow(2,Number_Of_Inputs);
+                                 }
+                           }while(approval!='Y'&&approval!='y'&&approval!='n'&&approval!='N');
+
+
+                           Number_Of_Inputs++;
+                   }
+
+            system("cls");
+
+            printf("I think your Number is %d\n\n\n",Number);
+
+            printf("challenge me again?{y/n}");
+
+            do
+            {
+                  approval=getch();
+                   if((approval=='Y'||approval=='y'))
+                   {
+                          Play=1;
+                   }
+                   else if(approval!='n'||approval!='N')
+                   {
+                       Play=0;
+                   }
+            }while(approval!='Y'&&approval!='y'&&approval!='n'&&approval!='N');
+
+
     }
 
-while(approval!='y'&&approval!='Y'&&approval!='n'&&approval!='N'&&counter<5)
-{
-printf("\e[?25l");
-gotoxy(71,14);
-printf("Is your number here?{y/n}");
-approval=getch();
-}
-if((approval=='Y'||approval=='y'))
-{
- number=number+Pow(2,counter);
-}
-if(counter<5)
-{
-    counter++;
-    goto up1;
-}
-else
-{
     system("cls");
-    gotoxy(71,14);
-    system("pause");
-    system("cls");
-    gotoxy(71,14);
-    printf("I think your number is %d",number);
-    gotoxy(73,18);
-    printf("press any key to exit");
-    getch();
-}
+    printf("See ya loser ;)");
+    sleep(3);
+
     return 0;
 }
